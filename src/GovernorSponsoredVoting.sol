@@ -3,20 +3,57 @@ pragma solidity ^0.8.13;
 
 import {Governor} from "@openzeppelin/contracts/governance/Governor.sol";
 import {BasePaymaster} from "lib/account-abstraction/contracts/core/BasePaymaster.sol";
+import {IEntryPoint} from "lib/account-abstraction/contracts/interfaces/IEntryPoint.sol";
 import {UserOperation} from "lib/account-abstraction/contracts/interfaces/UserOperation.sol";
+import {GovernorCountingSimple} from
+  "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 
 error NotSponsored(bytes4 selector);
 
-abstract contract GovernorSponsoredVoting is Governor, BasePaymaster {
+abstract contract GovernorSponsoredVoting is Governor, GovernorCountingSimple, BasePaymaster {
   mapping(bytes4 => bool) sponsoredFunctions;
 
-  constructor() {
+  constructor(IEntryPoint _entryPoint) BasePaymaster(_entryPoint) {
     sponsoredFunctions[Governor.castVote.selector] = true;
     sponsoredFunctions[Governor.castVoteWithReason.selector] = true;
     sponsoredFunctions[Governor.castVoteWithReasonAndParams.selector] = true;
     sponsoredFunctions[Governor.castVoteBySig.selector] = true;
     sponsoredFunctions[Governor.castVoteWithReasonAndParamsBySig.selector] = true;
+    // TODO: sponsor execution
   }
+
+  /**
+   * @dev Mapping from proposal ID to vote tallies for that proposal.
+   */
+  mapping(uint256 => ProposalVote) private _proposalVotes;
+
+  /**
+   * @dev Mapping from proposal ID and address to the weight the address
+   * has cast on that proposal, e.g. _proposalVotersWeightCast[42][0xBEEF]
+   * would tell you the number of votes that 0xBEEF has cast on proposal 42.
+   */
+  mapping(uint256 => mapping(address => uint128)) private _proposalVotersWeightCast;
+
+  // // solhint-disable-next-line func-name-mixedcase
+  // function COUNTING_MODE()
+  //     public
+  //     pure
+  //     virtual
+  //     override
+  //     returns (string memory)
+  // {
+  //     return "support=bravo&quorum=for,abstain";
+  // }
+
+  // /**
+  //  * @dev See {IGovernor-hasVoted}.
+  //  */
+  // function hasVoted(
+  //     uint256 proposalId,
+  //     address account
+  // ) public view virtual override returns (bool) {
+  //     return _proposalVotersWeightCast[proposalId][account] > 0;
+  // }
 
   /**
    * payment validation: check if paymaster agrees to pay.
