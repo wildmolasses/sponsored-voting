@@ -170,15 +170,9 @@ contract TestHarness is Test {
     _userOperation.maxFeePerGas = 3e9;
     _userOperation.maxPriorityFeePerGas = 2 gwei;
     _userOperation.paymasterAndData = abi.encodePacked(address(governor));
-    // _userOperation.signature = vm.sign()
     bytes32 _userOpHash = entryPoint.getUserOpHash(_userOperation);
-    console2.log(accountOwner);
-    // bytes32 _digest = keccak256(
-    //     abi.encode(_userOpHash, address(entryPoint), block.chainid)
-    // ).toEthSignedMessageHash();
     (uint8 _v, bytes32 _r, bytes32 _s) = vm.sign(pk, _userOpHash.toEthSignedMessageHash());
     _userOperation.signature = bytes.concat(_r, _s, bytes1(_v));
-    console.logBytes32(_userOpHash);
     return (_userOperation, _userOpHash);
   }
 }
