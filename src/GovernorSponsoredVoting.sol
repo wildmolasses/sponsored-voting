@@ -56,8 +56,8 @@ abstract contract GovernorSponsoredVoting is Governor, BasePaymaster {
     require(_governor == address(this));
     // don't send us money...
     require(_value == 0);
-    // then ensure that proposal is active
-    require(state(_proposalId) == ProposalState.Active);
+    // TODO: ensure that proposal is active
+    // cannot `require(state(_proposalId) == ProposalState.Active)` because it uses block.number
     // and that voter has weight and not just spamming
     require(getVotes(_userOp.sender, proposalSnapshot(_proposalId)) > 0);
     // and that voter has not yet voted
