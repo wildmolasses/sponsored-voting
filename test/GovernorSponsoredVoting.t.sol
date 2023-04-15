@@ -185,10 +185,11 @@ contract SmokeTest is TestHarness {
   }
 }
 
+// TODO: smoke test verifies paymaster functionality, but we need real unit tests
 // contract GovernanceSponsoredVotingTest is TestHarness {
-//     function test_smoke() public {
-//         _submitProposal(proposal);
-//         _castVotes(account1, proposal.id);
-//         _executeProposal(proposal);
-//     }
+//     function test_revert_no_voting_weight() public {}
+//     function test_revert_already_voted() public {}
+//     function test_revert_maxCost_too_high() public {}
+//     function test_set_maxCost() public {}
+//     function test_a_million_more_things() public {}
 // }
