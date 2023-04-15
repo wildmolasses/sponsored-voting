@@ -94,4 +94,39 @@ abstract contract GovernorSponsoredVoting is Governor, BasePaymaster {
     require(bytes4(_voteOp.slice(0, 4)) == Governor.castVote.selector);
     (_proposalId, _support) = abi.decode(_voteOp.slice(4, _voteOp.length - 4), (uint256, uint8));
   }
+
+  // TODO: override paymaster methods with modifier `onlyGovernance` rather than `onlyOwner`
+  // or, modify BasePaymaster so that it's not tightly coupled with Ownable
+
+  //   /**
+  //    * @dev See {BasePaymaster-withdrawTo}.
+  //    */
+  //   function withdrawTo(address payable withdrawAddress, uint256 amount)
+  //     public
+  //     override
+  //     onlyGovernance
+  //   {
+  //     entryPoint.withdrawTo(withdrawAddress, amount);
+  //   }
+
+  //   /**
+  //    * @dev See {BasePaymaster-addStake}.
+  //    */
+  //   function addStake(uint32 unstakeDelaySec) external payable override onlyGovernance {
+  //     entryPoint.addStake{value: msg.value}(unstakeDelaySec);
+  //   }
+
+  //   /**
+  //    * @dev See {BasePaymaster-unlockStake}.
+  //    */
+  //   function unlockStake() external override onlyGovernance {
+  //     entryPoint.unlockStake();
+  //   }
+
+  //   /**
+  //    * @dev See {BasePaymaster-withdrawStake}.
+  //    */
+  //   function withdrawStake(address payable withdrawAddress) external override onlyGovernance {
+  //     entryPoint.withdrawStake(withdrawAddress);
+  //   }
 }
