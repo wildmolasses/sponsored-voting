@@ -15,11 +15,11 @@ abstract contract GovernorSponsoredVoting is Governor, BasePaymaster {
 
   constructor(IEntryPoint _entryPoint) BasePaymaster(_entryPoint) {
     // TODO: should be gasLimits
-    sponsoredFunctions[Governor.castVote.selector] = true;
-    sponsoredFunctions[Governor.castVoteWithReason.selector] = true;
-    sponsoredFunctions[Governor.castVoteWithReasonAndParams.selector] = true;
-    sponsoredFunctions[Governor.castVoteBySig.selector] = true;
-    sponsoredFunctions[Governor.castVoteWithReasonAndParamsBySig.selector] = true;
+    // sponsoredFunctions[Governor.castVote.selector] = true;
+    // sponsoredFunctions[Governor.castVoteWithReason.selector] = true;
+    // sponsoredFunctions[Governor.castVoteWithReasonAndParams.selector] = true;
+    // sponsoredFunctions[Governor.castVoteBySig.selector] = true;
+    // sponsoredFunctions[Governor.castVoteWithReasonAndParamsBySig.selector] = true;
     // TODO: sponsor execution
   }
 

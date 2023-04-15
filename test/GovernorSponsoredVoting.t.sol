@@ -138,8 +138,6 @@ contract TestHarness is Test {
     // TODO: changing to AA
     // // vm.prank(_voter);
     // // governor.castVote(_proposalId, _support);
-    // bytes memory _op = abi.encodeWithSignature("castVote(uint,uint8)", _proposalId, _support);
-
     bytes memory _op = abi.encodeWithSelector(governor.castVote.selector, _proposalId, _support);
 
     bytes memory _executeOp = abi.encodeWithSelector(
@@ -149,11 +147,7 @@ contract TestHarness is Test {
       _op // func
     );
 
-    (UserOperation memory _userOp, bytes32 _userOpHash) = _createUserOp(_voter, _executeOp);
-    // entryPoint.handleOps(_userOp);
-    // vm.prank(address(entryPoint));
-    // this line was useful for debugging but we can't run it cause it increments nonce
-    // // account1.validateUserOp(_userOp, _userOpHash, 0);
+    (UserOperation memory _userOp, /* bytes32 _userOpHash */ ) = _createUserOp(_voter, _executeOp);
     UserOperation[] memory _ops = new UserOperation[](1);
     _ops[0] = _userOp;
     entryPoint.handleOps(_ops, beneficiary);
