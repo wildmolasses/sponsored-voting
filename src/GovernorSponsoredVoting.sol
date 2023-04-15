@@ -8,7 +8,7 @@ import {UserOperation} from "lib/account-abstraction/contracts/interfaces/UserOp
 import {SimpleAccount} from "lib/account-abstraction/contracts/samples/SimpleAccount.sol";
 import {GovernorCountingSimple} from
   "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
-import {BytesLib} from "./BytesLib.sol";
+import {BytesLib} from "./lib/BytesLib.sol";
 
 error NotSponsored(bytes4 selector);
 
@@ -26,6 +26,7 @@ abstract contract GovernorSponsoredVoting is Governor, BasePaymaster {
   }
 
   // TODO: manage blacklist, preventing future votes if user call did not effectively vote!
+  // TODO: check voting weight and enforce some threshold to prevent griefing
 
   /**
    * payment validation: check if paymaster agrees to pay.
@@ -69,7 +70,7 @@ abstract contract GovernorSponsoredVoting is Governor, BasePaymaster {
       bytes32(
         bytes.concat(
           bytes20(0), // sigAuthorizer - 0 for valid signature, 1 to mark signature failure,
-            // otherwise, an address of an "authorizer" contract.
+          // otherwise, an address of an "authorizer" contract.
           // TODO: timestamp should not be valid indefinitely but set to proposal deadline
           bytes6(0), // validUntil - last timestamp this operation is valid. 0 for "indefinite"
           bytes6(0) // validAfter - first timestamp this operation is valid
